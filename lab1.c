@@ -1,0 +1,36 @@
+#define _POSIX_C_SOURCE 200809L
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int main() {
+
+  // variable inital declarations
+  char *line = NULL;
+  size_t len = 0;
+  ssize_t read;
+
+  // prompt and take some input from user
+  printf("Please enter some text: ");
+  read = getline(&line, &len, stdin);
+
+  // error check for taking input
+  if (read == -1) {
+    perror("error with get line");
+    free(line);
+    return -1;
+  }
+
+  // return the split up text from user
+  printf("Tokens:\n");
+  char *saveptr;
+  char *tokens = strtok_r(line, "  \n", &saveptr);
+  while (tokens != NULL) {
+    printf("  %s\n", tokens);
+    tokens = strtok_r(NULL, " \n", &saveptr);
+  }
+
+  // free used memory and exit program
+  free(line);
+  return 0;
+}
